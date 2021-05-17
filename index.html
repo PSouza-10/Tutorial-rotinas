@@ -12,14 +12,34 @@
     />
     <title>Usuários</title>
     <style>
-      tr:hover {
+      td:last-child {
+        position: relative;
+      }
+      td:first-child:hover {
         cursor: pointer;
+        color: var(--bs-blue);
+      }
+      tr:hover .delete {
+        visibility: visible;
+      }
+      .delete {
+        visibility: hidden;
+        position: absolute;
+        right: -30px;
+        top: 0;
+        bottom: 0;
       }
     </style>
   </head>
   <body>
     <header
-      class="container-fluid d-flex p-2 justify-content-between align-items-center"
+      class="
+        container-fluid
+        d-flex
+        p-2
+        justify-content-between
+        align-items-center
+      "
     >
       <h1>Usuários</h1>
 
@@ -44,7 +64,26 @@
     </header>
     <main class="d-flex flex-column align-items-center gap-5 p-5 flex-md-row">
       <form id="createUser" class="d-flex flex-column align-items-center">
-        <h2>Criar usuário</h2>
+        <h2 id="formHeader">Criar usuário</h2>
+        <button
+          id="clearUserSelect"
+          class="btn btn-danger btn-sm"
+          type="reset"
+          style="display: none"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="22"
+            height="22"
+            fill="currentColor"
+            class="bi bi-x"
+            viewBox="0 0 16 16"
+          >
+            <path
+              d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"
+            />
+          </svg>
+        </button>
         <label for="name" class="form-label">
           Nome:
           <input type="text" class="form-control" name="name" id="name" />
@@ -66,7 +105,7 @@
         <tbody id="users"></tbody>
       </table>
     </main>
-    <h4>Clique em usuário para deletá-lo</h4>
+    <h4>Clique em um ID para alterar o usuário correspondente</h4>
 
     <script
       src="https://code.jquery.com/jquery-3.6.0.min.js"

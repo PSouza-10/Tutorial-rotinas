@@ -3,6 +3,7 @@ const handlers = {
     return response;
   },
   error: (response) => {
+    console.log(JSON.parse(response));
     return alert(response);
   },
 };
@@ -29,7 +30,7 @@ let users = [];
 function updateTable() {
   const rows = users.map(
     ({ email, id, nome }) =>
-      `<tr onclick="deleteUser(${id})"> <td>${id}</td>\n<td>${nome}</td>\n<td>${email}</td></tr>`
+      `<tr > <td onclick="setFormUser('${id}')">${id}</td>\n<td>${nome}</td>\n<td>${email}</td> <td><button class="delete btn btn-sm btn-danger" onClick="deleteUser(${id})"> Deletar</button></td></tr>`
   );
   $("#users").html(rows.join("\n"));
 }
@@ -59,9 +60,48 @@ function deleteUser(id) {
   });
 }
 
+let editedId = null;
+function clearEditForm(e) {
+  $("#formHeader").text("Criar Usuário");
+  $("#send-form").text("Inserir");
+  $("#clearUserSelect").hide();
+  $("#name").val("");
+  $("#email").val("");
+
+  editedId = null;
+}
+function setFormUser(userId) {
+  const u = users.find(({ id }) => id === userId);
+  console.log(userId);
+  if (u) {
+    $("#name").val(u.nome);
+    $("#email").val(u.email);
+
+    editedId = userId;
+
+    $("#formHeader").text("Alterar");
+    $("#send-form").text("Salvar Alterações");
+    $("#clearUserSelect").show();
+  } else {
+    clearEditForm();
+  }
+}
+function updateUser(e) {
+  e.preventDefault();
+  const formData = $("#createUser").serialize() + `&id=${editedId}`;
+  console.log(formData);
+  request.post("update.php", formData).then((response) => {
+    console.log(response);
+    users = [...JSON.parse(response).data];
+    updateTable();
+  });
+}
 $(document).ready(() => {
   getUsers();
-  $("#send-form").click(createUser);
-
+  clearEditForm();
+  $("#send-form").click((e) =>
+    editedId === null ? createUser(e) : updateUser(e)
+  );
+  $("#clearUserSelect").click(clearEditForm);
   $("#refresh").click(getUsers);
 });

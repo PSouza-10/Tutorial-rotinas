@@ -6,7 +6,10 @@
 
      
         $errors = '';
-      
+        $id = $_POST['id'];
+        if ( empty($_POST['name']) ) {
+           $errors .= 'Um ID é necessário para alterar um usuário';
+        }
         $name = $_POST['name'];
         if ( empty($_POST['name']) ) {
            $errors .= 'O campo "Nome" é obrigatório';
@@ -18,7 +21,7 @@
       
       
         if ( empty($errors) ) {
-            create($conn,$name,$email);
+            update($conn,$id,$name,$email);
             $users = getAll($conn);
             http_response_code( 201 );
             echo json_encode( [ 'msg' => 'Usuário cadastrado', 'data' => $users ]);

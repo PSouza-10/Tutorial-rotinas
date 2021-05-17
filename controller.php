@@ -13,7 +13,13 @@
 
 
     }
+    function update($conn,$id,$name,$email){
+       
+        $statement = $conn->prepare("UPDATE users SET nome='$name', email='$email' WHERE id=$id");
+        $statement->execute();
 
+
+    }
     function deleteById($conn,$id){
         
         $statement = $conn->prepare("DELETE FROM users WHERE id = $id");
